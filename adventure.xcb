@@ -1,0 +1,117 @@
+rem ******************* Adventure Template******************************
+rem *
+rem * XC=BASIC V2 template for a text adventure, similar to: 
+rem * https://github.com/gpowerf/CommodoreAdventureTemplate
+rem *
+rem * This is not a full game, it is a template to create a game 
+rem *
+rem ********************************************************************
+
+rem ************************* global vars ******************************
+
+let lc! = 0
+const O! = 2
+
+rem *** Map ***
+dim l![3, 4]
+l![0,0] = 255:l![0,1] = 2:l![0,2] = 255l![0,3] = 1
+l![1,0] = 255:l![1,1] = 255:l![1,2] = 255l![1,3] = 255
+l![2,0] = 0:l![2,1] = 255:l![2,2] = 255l![2,3] = 255
+
+rem *** Description of locations ***
+dim d$[3]
+d$[0] = "a city park. It is a bright day and you can see people enjoying the park."
+d$[1] = "a corner shop. It seems to be stocked with all sorts of items."
+d$[2] = "your home."
+
+rem *** Location of objects ***
+dim obl![3]
+obl![0] = 0  
+obl![1] = 0 
+obl![2] = 2 
+
+rem *** Objects, description, locations ***
+dim ob$[3, 2]
+ob$[0,0]="candle":ob$[0,1]="An old red candle."
+ob$[1,0]="bottle":ob$[1,1]="An empty milk bottle."
+ob$[2,0]="key":ob$[2,1]="A shinny golden key."
+
+dim ol![3]
+ol![0] = 0:ol![1] = 0:ol![2] = 2
+
+rem *** word 1 and 2 for handling commands ***
+dim w1$
+dim w2$
+
+rem ************************* procs ************************************
+
+rem *** Look at surroundings ***
+proc look(location!)
+	
+	rem *** print description
+	print "{CR}{CR}You can see ";
+	print \d$[location!]
+	
+	rem *** print exirs
+	print "{CR}Exits to the: ";
+	if \l![\lc!,0] <> 255 then print "north ";
+	if \l![\lc!,1] <> 255 then print "south ";
+	if \l![\lc!,2] <> 255 then print "west ";
+	if \l![\lc!,3] <> 255 then print "east ";
+	
+	rem ***look at objects***
+	print "{CR}{CR}You can also see the following objects:"
+	for i=0 to \O!
+		if \obl![i]=\lc! then print \ob$[i,0];:print " ";
+	next
+	print "{CR}"
+endproc
+
+rem *** Separate words ***
+rem *** output to globals vars w1 and w2
+proc sepwords(str$, sep$)
+	dim buffer![100]
+	b$ = @buffer!
+	windex! = strpos!(str$, sep$)
+	strncpy b$, str$, windex!
+	\w1$ = b$
+	\w2$ = str$ + windex! + 1 
+endproc
+
+rem *** Examine objects ***
+proc examine(str$)
+	print "{CR}"
+	bool! = 0
+	for i=0 to \O!
+		if \obl![i] = \lc! or \obl![i] = 255 then if strcmp(\ob$[i,0], str$) = 0 then print \ob$[i,1]:goto endp
+	next
+	print "you can't examine that"
+	endp:
+endproc
+
+rem ********************************************************************
+
+poke 53280,0:poke 53281,0  
+print "{CLR}{GREEN}{LOWER_CASE}       *** Adventure Template ***"
+print "{CR}Game start"
+call look(lc!)
+
+rem *** a buffer is needed to handle the input
+dim buff$[100]
+command$ = @buff$
+
+rem *** game loop ***
+let quit! = 0
+repeat
+	print "{CR}>";
+	input command$, 99
+	call sepwords(command$, " ")
+	if strcmp(w1$, "look") = 0 then call look(lc!)
+	if strcmp(w1$, "examine") = 0 then call examine(w2$)
+until quit! = 1
+
+
+
+
+
+
