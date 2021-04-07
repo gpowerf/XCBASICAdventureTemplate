@@ -11,6 +11,7 @@ rem ************************* Global vars ******************************
 
 let lc! = 0
 const O! = 2
+const inlen = 20
 
 rem *** Map ***
 dim l![3, 4]
@@ -70,7 +71,7 @@ endproc
 rem *** Separate words ***
 rem *** output to globals vars w1 and w2
 proc sepwords(str$, sep$)
-	dim buffer![100]
+	dim buffer![\inlen]
 	b$ = @buffer!
 	windex! = strpos!(str$, sep$)
 	strncpy b$, str$, windex!
@@ -136,14 +137,14 @@ print "{CR}Game start"
 call look(lc!)
 
 rem *** a buffer is needed to handle the input
-dim buff$[100]
-command$ = @buff$
+dim buff![inlen]
+command$ = @buff!
 
 rem *** game loop ***
 let quit! = 0
 repeat
 	print "{CR}>";
-	input command$, 99
+	input command$, cast!(inlen)
 	call sepwords(command$, " ")
 	if strcmp(w1$, "look") = 0 then call look(lc!)
 	if strcmp(w1$, "examine") = 0 then call examine(w2$)
