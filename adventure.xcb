@@ -7,7 +7,7 @@ rem * This is not a full game, it is a template to create a game
 rem *
 rem ********************************************************************
 
-rem ************************* global vars ******************************
+rem ************************* Global vars ******************************
 
 let lc! = 0
 const O! = 2
@@ -80,14 +80,25 @@ endproc
 
 rem *** Examine objects ***
 proc examine(str$)
-	print "{CR}"
-	bool! = 0
+	print "{CR}" 
 	for i=0 to \O!
 		if \obl![i] = \lc! or \obl![i] = 255 then if strcmp(\ob$[i,0], str$) = 0 then print \ob$[i,1]:goto endp
 	next
 	print "you can't examine that"
 	endp:
 endproc
+
+rem *** move around ***
+proc walk(w1$, w2$, lc!)
+	let nl! = 255
+	if strcmp(w1$, "n") = 0  or strcmp(w2$, "north") = 0  then nl!=\l![lc!,0]
+	if strcmp(w1$, "s") = 0  or strcmp(w1$, "south") = 0  then nl!=\l![lc!,1]
+	if strcmp(w1$, "w") = 0  or strcmp(w1$, "west") = 0  then nl!=\l![lc!,2]
+	if strcmp(w1$, "e") = 0  or strcmp(w1$, "east") = 0  then nl!=\l![lc!,3]
+	if nl!=255 then print "{CR}{CR}you can't go that way"
+	if nl!<>255 then \lc!=nl!:call look(\lc!)
+endproc 
+
 
 rem ********************************************************************
 
@@ -108,6 +119,11 @@ repeat
 	call sepwords(command$, " ")
 	if strcmp(w1$, "look") = 0 then call look(lc!)
 	if strcmp(w1$, "examine") = 0 then call examine(w2$)
+	if strcmp(w1$, "n") = 0 then call walk(w1$, w2$, lc!)
+	if strcmp(w1$, "s") = 0 then call walk(w1$, w2$, lc!)
+	if strcmp(w1$, "e") = 0 then call walk(w1$, w2$, lc!)
+	if strcmp(w1$, "w") = 0 then call walk(w1$, w2$, lc!)
+	if strcmp(w1$, "go") = 0 then call walk(w1$, w2$, lc!)
 until quit! = 1
 
 
