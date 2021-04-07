@@ -1,0 +1,160 @@
+************************************************************************
+************************************************************************
+This text file discribes game's architecture. 
+************************************************************************
+************************************************************************
+
+
+************************************************************************
+* Intro:
+************************************************************************
+
+This document describes the architecture of the text adventure. 
+
+This is not a complete game, it is a template that can be extended to 
+create a complete game in XC=BASIC V2. 
+
+There's no way to finish this game. You can move around the small 
+world, get and drop objects, as well as look at things. 
+
+************************************************************************
+* Map:
+************************************************************************
+
+This is the map of rooms:
+
+      .---.       .---.          N(0)
+      | 0 |-------| 1 |            |
+      '---'       '---'      W(2)--+--E(3)    
+        |                          |
+        |                        S(1)
+      .---.
+      | 2 |
+      '---'
+
+Room 1 has two exits, to the east is room 2 and to the south is room 3.
+Room 2 has one exit, to the west is room 1.
+Room 3 has one exit, to the north is room 1.
+
+This is represented as an array:
+
+ROOM	NAME	N(0)	S(1)	W(2)	E(3)
+0       park     -1   	  2   	 -1   	  1
+1       shop     -1   	 -1   	  0   	 -1
+2       home      0   	 -1   	 -1   	 -1
+
+As you can see each room has 4 exists and the connections are stored in
+the matrix. And -1 indicates that there are no exists in that direction. 
+
+In Basic this is represented as an array l (locations):
+
+	rem *** Map ***
+	dim l![3, 4]
+	l![0,0] = 255:l![0,1] = 2:l![0,2] = 255:l![0,3] = 1
+	l![1,0] = 255:l![1,1] = 255:l![1,2] = 0:l![1,3] = 255
+	l![2,0] = 0:l![2,1] = 255:l![2,2] = 255:l![2,3] = 255
+
+************************************************************************
+* Room descriptions:
+************************************************************************
+
+For the room descriptions we also use an array. Remember we have rooms 
+0, 1, and 2. A simple array with as many elements as there are rooms.
+
+	rem *** Description of locations ***
+	dim d$[3]
+	d$[0] = "a city park. It is a bright day and you can see people enjoying the park."
+	d$[1] = "a corner shop. It seems to be stocked with all sorts of items."
+	d$[2] = "your home."
+
+************************************************************************
+* Objects & object descriptions:
+************************************************************************
+
+Objects and descriptions are stored in two arrays as follows:
+
+Array 1:
+ID	ROOM	
+0	0		
+1	0		
+2	2	
+
+In code:
+
+	rem *** Location of objects ***
+	dim obl![3]
+	obl![0] = 0  
+	obl![1] = 0 
+	obl![2] = 2 
+
+Array 1:
+ID	NAME	DESCRIPTION
+0	candle	an old red candle.
+1	bottle	an empty milk bottle.
+2	key		a shinny golden key.
+
+In code:
+
+	rem *** Objects, description, locations ***
+	dim ob$[3, 2]
+	ob$[0,0]="candle":ob$[0,1]="An old red candle."
+	ob$[1,0]="bottle":ob$[1,1]="An empty milk bottle."
+	ob$[2,0]="key":ob$[2,1]="A shinny golden key."
+
+So these two arrays represent the following: 
+	
+Object 0 is a candle and it is in the park. 
+Object 1 is a bottle and it is in the park. 
+Object 2 is a key at it is at home.
+
+There is also another location which is 255, this is your bag, an object
+that you are carrying. This is how the inventory is powered. 
+
+When you get an object the location is set to 255.
+
+When you drop an object the location is set to lc!. 
+
+************************************************************************
+* Global variables:
+************************************************************************
+
+The game uses a number of global variable, primarily the variable lc!, 
+this is your current location. 
+
+You may also want to keep a number of flags to indicate that certain
+events have happened, eg: imagine a closed cabinet, you could have a 
+variable to indicate that it is closed, and an object only becomes 
+visible when you open it. 
+
+************************************************************************
+* Game loop:
+************************************************************************
+
+This is where the magic happens, the game look runs continuously during
+your adventure time. There's no game ending in this template, the only 
+way to exit this loop is by typing the quit command. 
+
+************************************************************************
+* Natural language:
+************************************************************************
+
+I've kept things simple here, the game accepts commands of or or two
+words only, much like Colossal Cave Adventure.
+
+It makes use of the mid$, left$, and right$ functions to separate the
+input string. This is done within the main loop, if you wanted to come
+up with more complex natural language processing you might want to
+write this as a function instead. 
+
+************************************************************************
+* Variables and constants:
+************************************************************************
+
+lc! - current location
+O!  - number of objects
+inlen - the length of the command the player can type in
+
+..... more to come ......
+
+
+
