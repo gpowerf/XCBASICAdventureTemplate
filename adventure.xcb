@@ -14,9 +14,9 @@ const O! = 2
 
 rem *** Map ***
 dim l![3, 4]
-l![0,0] = 255:l![0,1] = 2:l![0,2] = 255l![0,3] = 1
-l![1,0] = 255:l![1,1] = 255:l![1,2] = 255l![1,3] = 255
-l![2,0] = 0:l![2,1] = 255:l![2,2] = 255l![2,3] = 255
+l![0,0] = 255:l![0,1] = 2:l![0,2] = 255:l![0,3] = 1
+l![1,0] = 255:l![1,1] = 255:l![1,2] = 0:l![1,3] = 255
+l![2,0] = 0:l![2,1] = 255:l![2,2] = 255:l![2,3] = 255
 
 rem *** Description of locations ***
 dim d$[3]
@@ -109,6 +109,16 @@ proc getobj(str$)
 	endp:
 endproc
 
+rem ***drop object***
+proc drpobj(str$)
+	print "{CR}"
+	for i=0 to \O!
+		if strcmp(\ob$[i,0], str$) = 0 and \obl![i]=255 then \obl![i] = \lc!:print "Dropped the ";:print str$: goto endp
+	next
+	print "I can't do that.":return
+	endp:
+endproc
+
 rem ***inventory***
 proc inventory
 	print "{CR}{CR}You have the the following items:{CR}"
@@ -117,7 +127,6 @@ proc inventory
 	next
 	print "{CR}"
 endproc
-
 
 rem ********************************************************************
 
@@ -144,7 +153,9 @@ repeat
 	if strcmp(w1$, "w") = 0 then call walk(w1$, w2$, lc!)
 	if strcmp(w1$, "go") = 0 then call walk(w1$, w2$, lc!)
 	if strcmp(w1$, "get") = 0 then call getobj(w2$)
+	if strcmp(w1$, "drop") = 0 then call drpobj(w2$)
 	if strcmp(w1$, "inv") = 0 or strcmp(w1$, "inventory") = 0 then call inventory
+	if strcmp(w1$, "quit") = 0 then end
 until quit! = 1
 
 
