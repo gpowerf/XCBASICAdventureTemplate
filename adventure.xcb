@@ -115,7 +115,7 @@ proc drpobj(str$)
 	for i=0 to \O!
 		if strcmp(\ob$[i,0], str$) = 0 and \obl![i]=255 then \obl![i] = \lc!:print "Dropped the ";:print str$: goto endp
 	next
-	print "I can't do that.":return
+	print "I can't do that."
 	endp:
 endproc
 
