@@ -92,12 +92,31 @@ rem *** move around ***
 proc walk(w1$, w2$, lc!)
 	let nl! = 255
 	if strcmp(w1$, "n") = 0  or strcmp(w2$, "north") = 0  then nl!=\l![lc!,0]
-	if strcmp(w1$, "s") = 0  or strcmp(w1$, "south") = 0  then nl!=\l![lc!,1]
-	if strcmp(w1$, "w") = 0  or strcmp(w1$, "west") = 0  then nl!=\l![lc!,2]
-	if strcmp(w1$, "e") = 0  or strcmp(w1$, "east") = 0  then nl!=\l![lc!,3]
+	if strcmp(w1$, "s") = 0  or strcmp(w2$, "south") = 0  then nl!=\l![lc!,1]
+	if strcmp(w1$, "w") = 0  or strcmp(w2$, "west") = 0  then nl!=\l![lc!,2]
+	if strcmp(w1$, "e") = 0  or strcmp(w2$, "east") = 0  then nl!=\l![lc!,3]
 	if nl!=255 then print "{CR}{CR}you can't go that way"
 	if nl!<>255 then \lc!=nl!:call look(\lc!)
 endproc 
+
+rem ***get object***
+proc getobj(str$)
+	print "{CR}"
+	for i=0 to \O!
+		if strcmp(\ob$[i,0], str$) = 0 and \obl![i]=\lc! then \obl![i] = 255:print "Got the ";:print str$: goto endp
+	next
+	print "I can't do that."
+	endp:
+endproc
+
+rem ***inventory***
+proc inventory
+	print "{CR}{CR}You have the the following items:{CR}"
+	for i=0 to \O!
+		if \obl![i]=255 then print \ob$[i,0];:print " ";
+	next
+	print "{CR}"
+endproc
 
 
 rem ********************************************************************
@@ -124,6 +143,8 @@ repeat
 	if strcmp(w1$, "e") = 0 then call walk(w1$, w2$, lc!)
 	if strcmp(w1$, "w") = 0 then call walk(w1$, w2$, lc!)
 	if strcmp(w1$, "go") = 0 then call walk(w1$, w2$, lc!)
+	if strcmp(w1$, "get") = 0 then call getobj(w2$)
+	if strcmp(w1$, "inv") = 0 or strcmp(w1$, "inventory") = 0 then call inventory
 until quit! = 1
 
 
