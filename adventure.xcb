@@ -155,7 +155,7 @@ repeat
 	if strcmp(w1$, "get") = 0 then call getobj(w2$)
 	if strcmp(w1$, "drop") = 0 then call drpobj(w2$)
 	if strcmp(w1$, "inv") = 0 or strcmp(w1$, "inventory") = 0 then call inventory
-	if strcmp(w1$, "quit") = 0 then end
+	if strcmp(w1$, "quit") = 0 then quit! = 1
 until quit! = 1
 
 
