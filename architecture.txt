@@ -77,7 +77,8 @@ For the room descriptions we also use an array. Remember we have rooms
 	dim d$[3]
 	d$[0] = "a city park. It is a bright day and you can see people enjoying the park."
 	d$[1] = "a corner shop. It seems to be stocked with all sorts of items."
-	d$[2] = "your house."
+	d$[2] = "your house is to the east."
+	d$[3] = "ypu are inside your tiny house, it is so small it is just one room."
 
 ************************************************************************
 * Objects & object descriptions:
@@ -134,20 +135,23 @@ These are parts of the room you can interact with, fixtures like doors,
 windows, cabinets, etc... These are objects that in the game normally
 have two states, eg:
 
-Door - Open, closed
+Door - Locked, unlocked
 TV   - On, off
+Box	 - Open, close	
 
 These are represented as follows: 
 
 Array 1:
-	ID	NAME	DESCRIPTION 0							DESCRIPTION 1
-	0	TV		an old CRT TV, it is switched off.		the TV is now on.
-	1	door	a metal door, it is locked.				the door is now unlocked.
+	ID	NAME	VERB 0	VERB 1	NOUN	LOOK DESCRIPTION					EXAMINE DESCRIPTION 0					EXAMINE DESCRIPTION 1
+	0	TV		use		use		TV		There's a TV on a table.			an old CRT TV, it is switched off.		the TV is now on.
+	1	door	use		use		key		You can see the door from here.		a metal door, it is locked.				the door is now unlocked.
+	2	box		open	close	box		There's a box under the table.		a wooden box, it is closed.				the box is open and empty.
 
 Array 2:
 	ID	ROOM	STATE
 	0	3		0
 	1	2		0
+	2	3		0
 
 ************************************************************************
 * Global variables:
