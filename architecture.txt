@@ -65,6 +65,10 @@ example, when the door is oppened the map looks like this:
 	l![1,0] = 255:l![1,1] = 255:l![1,2] = 0:l![1,3] = 255
 	l![2,0] = 0:l![2,1] = 255:l![2,2] = 255:l![2,3] = 3
 	l![3,0] = 255:l![3,1] = 255:l![3,2] = 2:l![3,3] = 255
+	
+These map changes are done in the customcode(i!) proc, you can edit this
+to implement doors, bridges, rocks, or anything else that may block your
+path in the map. 
 
 ************************************************************************
 * Room descriptions:
@@ -211,6 +215,7 @@ write this as a function instead.
 lc! - current location
 O!  - number of objects
 inlen - the length of the command the player can type in
+fixtures! - number of fixtures
 
 ..... more to come ......
 
