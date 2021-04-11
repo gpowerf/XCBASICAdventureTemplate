@@ -50,9 +50,9 @@ dim w2$
 
 rem *** Interactive fixtures ***
 dim sf$[3, 8]
-sf$[0,0]="tv"  :sf$[0,1]="use" :sf$[0,2]="use"    :sf$[0,3]=" There's a TV on a table."       			     :sf$[0,4]="an old CRT TV, it is switched off." :sf$[0,5]="the TV is now on."         :sf$[0,6]="you turned the TV off." :sf$[0,7]="you turned the TV on." 
-sf$[1,0]="door":sf$[1,1]="open" :sf$[1,2]="close" :sf$[1,3]=" You can see the front door from here."		 :sf$[1,4]="a metal door, it is closed."        :sf$[1,5]="the door is now open."     :sf$[1,6]="you closed the door."   :sf$[0,7]="you opened the door."
-sf$[2,0]="key" :sf$[2,1]="open":sf$[2,2]="close"  :sf$[2,3]=" There's a box under the table, it has a lock." :sf$[2,4]="a wooden box, it is closed."        :sf$[2,5]="the box is open and empty.":sf$[2,6]="you closed the box."    :sf$[0,7]="you closed the box."
+sf$[0,0]="tv"  :sf$[0,1]="use"  :sf$[0,2]="use"   :sf$[0,3]=" There's a TV on a table."       			     :sf$[0,4]="an old CRT TV, it is switched off." :sf$[0,5]="the TV is now on."         :sf$[0,6]="you turned the TV off." :sf$[0,7]="you turned the TV on." 
+sf$[1,0]="door":sf$[1,1]="open" :sf$[1,2]="close" :sf$[1,3]=" You can see the front door from here."	     :sf$[1,4]="a metal door, it is closed."        :sf$[1,5]="the door is now open."     :sf$[1,6]="you closed the door."   :sf$[1,7]="you opened the door."
+sf$[2,0]="key" :sf$[2,1]="use"  :sf$[2,2]="use"   :sf$[2,3]=" There's a box under the table, it has a lock." :sf$[2,4]="a wooden box, it is closed."        :sf$[2,5]="the box is open and empty.":sf$[2,6]="you closed the box."    :sf$[2,7]="you closed the box."
 
 rem *** Location and state ***
 dim sfl![3,4]
@@ -63,7 +63,7 @@ sfl![2,0] = 3 :sfl![2,1] = 0:sfl![2,2] = 255: sfl![2,3] = 255
 rem ************************* procs & funcs ****************************
 
 rem **************** Custom procs/code
-rem *** This code needs to be created for indivudual games, it is not
+rem *** This code needs to be created for individual games, it is not
 rem *** generic
 
 proc customcode(i!)
@@ -189,6 +189,11 @@ proc fix(vrb$, nun$)
 	thirdstep:
 	
 	rem *** now let's look at the verb
+	rem print \sf$[i,1]: print "-": print \sf$[i,2]
+	
+	if strcmp(\sf$[i,1], \sf$[i,2]) = 0 then if strcmp(\sf$[i,1], vrb$) = 0 then if \sfl![0,1] = 0 then print "{CR}": print \sf$[i,5]: \sfl![i,1] = flipbit!(\sfl![i,1]): goto endp 
+	if strcmp(\sf$[i,1], \sf$[i,2]) = 0 then if strcmp(\sf$[i,2], vrb$) = 0 then if \sfl![0,1] = 1 then print "{CR}": print \sf$[i,6]: \sfl![i,1] = flipbit!(\sfl![i,1]): goto endp 
+	
 	if strcmp(\sf$[i,1], vrb$) = 0 then print "{CR}": print \sf$[i,5]: \sfl![i,1] = flipbit!(\sfl![i,1]): call customcode(\sfl![i,2])
 	if strcmp(\sf$[i,2], vrb$) = 0 then print "{CR}":print \sf$[i,6]: \sfl![i,1] = flipbit!(\sfl![i,1]): call customcode(\sfl![i,3])
 	
