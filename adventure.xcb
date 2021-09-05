@@ -24,10 +24,10 @@ l![3,0] = 255:l![3,1] = 255:l![3,2] = 255:l![3,3] = 255
 
 rem *** Description of locations ***
 dim d$[4]
-d$[0] = "a city park. It is a bright day and you can see people enjoying the park."
-d$[1] = "a corner shop. It seems to be stocked with all sorts of items."
-d$[2] = "your house is to the east."
-d$[3] = "ypu are inside your tiny house, it is so small it is just one room."
+d$[0] = "A city park. It is a bright day and you can see people enjoying the park."
+d$[1] = "A corner shop. It seems to be stocked with all sorts of items."
+d$[2] = "Your house is to the east."
+d$[3] = "You are inside your tiny house, it is so small it is just one room."
 
 rem *** Location of objects ***
 dim obl![3]
@@ -73,6 +73,19 @@ proc customcode(i!)
 endproc
 
 rem **************** Generic procs
+
+rem *** save the ganme
+proc savegame(i#)
+	save "@0:gamesave", 8, i#, i# + 1
+	print ferr()
+endproc
+
+rem *** load the ganme
+proc loadgame(i#)
+	load "gamesave", 8, i#
+	print ferr()
+endproc
+
 
 rem *** flip bit 
 fun flipbit!(i!)
@@ -194,7 +207,7 @@ proc fix(vrb$, nun$)
 	if strcmp(\sf$[i,1], \sf$[i,2]) = 0 then if strcmp(\sf$[i,1], vrb$) = 0 then if \sfl![0,1] = 0 then print "{CR}": print \sf$[i,5]: \sfl![i,1] = flipbit!(\sfl![i,1]): goto endp 
 	if strcmp(\sf$[i,1], \sf$[i,2]) = 0 then if strcmp(\sf$[i,2], vrb$) = 0 then if \sfl![0,1] = 1 then print "{CR}": print \sf$[i,6]: \sfl![i,1] = flipbit!(\sfl![i,1]): goto endp 
 	
-	if strcmp(\sf$[i,1], vrb$) = 0 then print "{CR}": print \sf$[i,5]: \sfl![i,1] = flipbit!(\sfl![i,1]): call customcode(\sfl![i,2])
+	if strcmp(\sf$[i,1], vrb$) = 0 then print "{CR}": print \sf$[i,5]: \sfl![i,1] = flipbit!(\sfl![i,1]): call customcode(\sfl![i,2]): goto endp 
 	if strcmp(\sf$[i,2], vrb$) = 0 then print "{CR}":print \sf$[i,6]: \sfl![i,1] = flipbit!(\sfl![i,1]): call customcode(\sfl![i,3])
 	
 	endp:
@@ -227,6 +240,8 @@ repeat
 	if strcmp(w1$, "get") = 0 or strcmp(w1$, "take") = 0 then call getobj(w2$)
 	if strcmp(w1$, "drop") = 0 then call drpobj(w2$)
 	if strcmp(w1$, "inv") = 0 or strcmp(w1$, "inventory") = 0 then call inventory
+	if strcmp(w1$, "save") = 0 then call savegame(@lc!)
+	if strcmp(w1$, "load") = 0 then call loadgame(@lc!)
 	if strcmp(w1$, "quit") = 0 then quit! = 1
 	
 	rem *** this part deals with interactive fixtures
